@@ -1,4 +1,4 @@
-package configs
+package config
 
 import (
 	"log"
@@ -8,39 +8,56 @@ import (
 )
 
 type Config struct {
-	AppName     string
-	AppEnv      string
-	AppPort     string
-	DBHost      string
-	DBPort      string
-	DBUser      string
-	DBPassword  string
-	DBName      string
-	JWTSecret   string
+	AppName string
+	AppEnv  string
+	AppPort string
+
+	DBHost     string
+	DBPort     string
+	DBUser     string
+	DBPassword string
+	DBName     string
+
+	JWTSecret string
 }
 
 func LoadConfig() *Config {
-	err := godotenv.Load()
-	if err != nil {
+	// Load .env jika ada.
+	// Di production biasanya tidak ada .env, env disupply oleh Docker/Kubernetes/Systemd.
+	if err := godotenv.Load(); err != nil {
 		log.Println("Warning: .env file not found, using system environment variables")
 	}
 
 	return &Config{
-		AppName:    getEnv("APP_NAME", "Finance"),
-		AppEnv:     getEnv("APP_ENV", "development"),
-		AppPort:    getEnv("APP_PORT", "3000"),
-		DBHost:     getEnv("DB_HOST", "localhost"),
-		DBPort:     getEnv("DB_PORT", "5432"),
-		DBUser:     getEnv("DB_USER", "postgres"),
-		DBPassword: getEnv("DB_PASSWORD", "postgres"),
-		DBName:     getEnv("DB_NAME", "finance"),
-		JWTSecret:  getEnv("JWT_SECRET", "super-secret-key"),
+		// Optional
+		AppName: getEnv("APP_NAME", "Finance"),
+		AppEnv:  getEnv("APP_ENV", "development"),
+		AppPort: getEnv("APP_PORT", "3000"),
+
+		// Required
+		DBHost:     mustGetEnv("DB_HOST"),
+		DBPort:     mustGetEnv("DB_PORT"),
+		DBUser:     mustGetEnv("DB_USER"),
+		DBPassword: mustGetEnv("DB_PASSWORD"),
+		DBName:     mustGetEnv("DB_NAME"),
+
+		// Required
+		JWTSecret: mustGetEnv("JWT_SECRET"),
 	}
 }
 
-func getEnv(key, fallback string) string {
-	if value, exists := os.LookupEnv(key); exists {
-		return value
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
 	}
-	return fallback
+	return value
+}
+
+func mustGetEnv(key string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		log.Fatalf("environment variable %s is required", key)
+	}
+	return value
 }
