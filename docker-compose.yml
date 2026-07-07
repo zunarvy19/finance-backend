@@ -1,17 +1,23 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  postgres:
-    image: postgres:17-alpine
-    container_name: finance-postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: finance
+  finance-api:
+    build: .
+    container_name: finance-backend-api
+    restart: unless-stopped
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - "5050:5050"
+    env_file:
+      - .env
+    # Uncomment the networks block if your database is on a specific Docker network on your VPS.
+    networks:
+      - shared_pg_network
 
-volumes:
-  postgres_data:
+    # Alternatively, if your database is running directly on the VPS host (not in Docker),
+    # you can use 'host' network mode or 'host.docker.internal'.
+    # network_mode: "host"
+
+# Uncomment and rename below if you're joining an external network created on your VPS
+networks:
+  shared_pg_network:
+    external: true

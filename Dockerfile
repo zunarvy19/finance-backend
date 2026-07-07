@@ -31,7 +31,7 @@ RUN apk add --no-cache tzdata
 COPY --from=builder /app/bin/api .
 
 # Expose port (matches APP_PORT in .env)
-EXPOSE 3000
+EXPOSE 5050
 
 # Command to run the executable
 CMD ["./api"]
