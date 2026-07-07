@@ -20,10 +20,10 @@ type Service interface {
 
 type service struct {
 	repo Repository
-	cfg  *configs.Config
+	cfg  *config.Config
 }
 
-func NewService(repo Repository, cfg *configs.Config) Service {
+func NewService(repo Repository, cfg *config.Config) Service {
 	return &service{repo: repo, cfg: cfg}
 }
 

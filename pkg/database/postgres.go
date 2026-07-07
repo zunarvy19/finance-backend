@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func NewPostgresDB(cfg *configs.Config) *gorm.DB {
+func NewPostgresDB(cfg *config.Config) *gorm.DB {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Jakarta",
 		cfg.DBHost, cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBPort,

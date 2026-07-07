@@ -21,7 +21,7 @@ import (
 )
 
 func main() {
-	cfg := configs.LoadConfig()
+	cfg := config.LoadConfig()
 	db := database.NewPostgresDB(cfg)
 	validator.Init()
 

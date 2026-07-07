@@ -9,7 +9,7 @@ import (
 	"github.com/zunarvy19/finance-backend/pkg/jwt"
 )
 
-func AuthMiddleware(cfg *configs.Config) fiber.Handler {
+func AuthMiddleware(cfg *config.Config) fiber.Handler {
 	return func(c fiber.Ctx) error {
 		authHeader := c.Get("Authorization")
 		if authHeader == "" {

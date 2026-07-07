@@ -14,7 +14,7 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateTokens(userID uuid.UUID, email string, cfg *configs.Config) (accessToken string, refreshToken string, err error) {
+func GenerateTokens(userID uuid.UUID, email string, cfg *config.Config) (accessToken string, refreshToken string, err error) {
 	// Access token (15 minutes)
 	accessClaims := CustomClaims{
 		UserID: userID,
